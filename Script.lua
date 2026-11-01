@@ -6,43 +6,37 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local StarterGui = game:GetService("StarterGui")
 
--- Memunculkan notifikasi pop-up di pojok kanan bawah layar game
+-- Memunculkan notifikasi di pojok kanan bawah game
 StarterGui:SetCore("SendNotification", {
     Title = "Script Berhasil!",
     Text = "Halo " .. player.Name .. ", script buatan sendiri aktif!",
     Duration = 5
 })
 
-print("Script buatan " .. player.Name .. " berhasil 
+print("Script buatan " .. player.Name .. " berhasil dimuat!")
 
-    -- ==========================================
--- SCRIPT AUTO TREADMILL / TELEPORT KE ALAT
+
 -- ==========================================
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local rootPart = character:WaitForChild("HumanoidRootPart")
+-- SCRIPT AUTO INTERACT TREADMILL SEDERHANA
+-- ==========================================
 
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "Auto Treadmill On!",
-    Text = "Mencari dan mendekati treadmill...",
-    Duration = 3
+    Text = "Berdiri dekat treadmill, script mulai memicu interaksi...",
+    Duration = 4
 })
 
+-- Perulangan otomatis menekan semua tombol interaksi (ProximityPrompt) terdekat
 task.spawn(function()
     while true do
-        task.wait(1) -- Cek setiap 1 detik
+        task.wait(0.3) -- Jeda setengah detik tiap pencetan
         
         pcall(function()
-            -- Cari objek treadmill di dalam workspace berdasarkan namanya
-            for _, v in pairs(workspace:GetDescendants()) do
-                -- Sesuaikan kata kunci nama treadmill di game ini (misal: "Treadmill" atau nama part-nya)
-                if v:IsA("BasePart") and (v.Name:lower():find("treadmill") or v.Name:lower():find("gym")) then
-                    -- Teleport karakter langsung ke atas treadmill tersebut
-                    rootPart.CFrame = v.CFrame + Vector3.new(0, 3, 0)
-                    break
+            for _, prompt in pairs(workspace:GetDescendants()) do
+                if prompt:IsA("ProximityPrompt") then
+                    -- Picu interaksi tombol secara otomatis tanpa harus ditekan manual
+                    fireproximityprompt(prompt)
                 end
             end
         end)
