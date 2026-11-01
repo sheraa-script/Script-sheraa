@@ -13,36 +13,38 @@ StarterGui:SetCore("SendNotification", {
     Duration = 5
 })
 
-print("Script buatan " .. player.Name .. " berhasil dimuat!")
+print("Script buatan " .. player.Name .. " berhasil 
 
--- ==========================================
--- SCRIPT AUTO TREADMILL SEDERHANA
+    -- ==========================================
+-- SCRIPT AUTO TREADMILL / TELEPORT KE ALAT
 -- ==========================================
 
--- Notifikasi tanda script aktif
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "Auto Treadmill On!",
-    Text = "Fitur auto treadmill sedang berjalan...",
+    Text = "Mencari dan mendekati treadmill...",
     Duration = 3
 })
 
--- Bagian Auto Farm / Treadmill Loop
 task.spawn(function()
     while true do
-        task.wait(0.5) -- Jeda waktu setengah detik setiap klik (bisa diatur cepat lambatnya)
+        task.wait(1) -- Cek setiap 1 detik
         
         pcall(function()
-            -- PERINGATAN: Bagian path ke objek treadmill di bawah ini 
-            -- harus disesuaikan dengan nama objek/prompt aslinya di dalam game!
-            -- Contoh umum jika menggunakan ProximityPrompt:
-            
+            -- Cari objek treadmill di dalam workspace berdasarkan namanya
             for _, v in pairs(workspace:GetDescendants()) do
-                if v:IsA("ProximityPrompt") and v.ActionText:lower():find("treadmill") then
-                    fireproximityprompt(v)
+                -- Sesuaikan kata kunci nama treadmill di game ini (misal: "Treadmill" atau nama part-nya)
+                if v:IsA("BasePart") and (v.Name:lower():find("treadmill") or v.Name:lower():find("gym")) then
+                    -- Teleport karakter langsung ke atas treadmill tersebut
+                    rootPart.CFrame = v.CFrame + Vector3.new(0, 3, 0)
+                    break
                 end
             end
         end)
     end
 end)
-
